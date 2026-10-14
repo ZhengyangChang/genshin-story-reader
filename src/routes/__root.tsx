@@ -17,7 +17,7 @@ export const Route = createRootRoute({
       { title: '原神故事阅读器' },
       {
         name: 'description',
-        content: '按版本与幕，慢慢读懂故事。中文剧情阅读器，内容正在准备中。',
+        content: '按版本与幕，慢慢读懂故事。6.1 两幕简述，补充按需展开。',
       },
     ],
     links: [{ rel: 'stylesheet', href: styles }],

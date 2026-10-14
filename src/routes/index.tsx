@@ -23,7 +23,7 @@ function Home() {
           慢慢讲清楚。
         </h1>
         <p className="intro-copy">
-          那些发生过的事，那些选择与告别。
+          先读主要经过，再展开想了解的细节。
           <br />
           按版本与幕，读懂人物走过的路。
         </p>
@@ -33,6 +33,7 @@ function Home() {
               className="primary-button"
               to="/story/$storyId"
               params={{ storyId: resume.id }}
+              search={{ mode: prefs.readingMode }}
             >
               继续阅读 <span>→</span>
             </Link>
@@ -41,6 +42,7 @@ function Home() {
               className="primary-button"
               to="/story/$storyId"
               params={{ storyId: first.id }}
+              search={{ mode: 'brief' }}
             >
               {first.demo ? '体验阅读' : '开始阅读'} <span>→</span>
             </Link>
@@ -50,68 +52,70 @@ function Home() {
           </a>
         </div>
         <div className="intro-meta">
-          <span>逐幕叙述</span>
-          <span>按剧情顺序展开</span>
-          <span>为长文阅读而设计</span>
+          <span>简述先行</span>
+          <span>补充按需展开</span>
+          <span>为手机阅读而设计</span>
         </div>
       </section>
       <section id="collection" className="collection">
         <div className="section-heading">
           <h2>故事目录</h2>
-          <span>{stories.length} 篇正式故事</span>
+          <span>{stories.length} 幕 · 简述</span>
         </div>
-        <div className="preparing">
-          <span className="preparing-number">6.1</span>
-          <div>
-            <p className="eyebrow">首批内容 · 筹备中</p>
-            <h3>从奈芙尔相关情节开始</h3>
-            <p>先核实原始剧情，再写成完整一幕。正式故事尚未发布。</p>
+        {stories.map((article) => (
+          <Link
+            className="demo-card"
+            key={article.id}
+            to="/story/$storyId"
+            params={{ storyId: article.id }}
+            search={{ mode: 'brief' }}
+          >
+            <span className="preparing-number">{article.version}</span>
+            <div>
+              <span className="eyebrow">空月之歌 · 第 {article.act} 幕</span>
+              <h3>
+                {prefs.visitedArticleIds.includes(article.id)
+                  ? article.title
+                  : '未读故事'}
+              </h3>
+              <p>
+                {prefs.completedArticleIds.includes(article.id)
+                  ? '已有读完记录'
+                  : '主要经过 · 含折叠补充'}{' '}
+                ·{' '}
+                {article.availableModes.includes('detailed')
+                  ? '可切换详述'
+                  : '详述待补充'}
+              </p>
+            </div>
+            <span className="card-arrow">↗</span>
+          </Link>
+        ))}
+        {!stories.length && (
+          <div className="preparing">
+            <p>正式故事准备中，可以先体验下方阅读示例。</p>
           </div>
-          <span className="pill">待成稿</span>
-        </div>
+        )}
         {demo && (
           <Link
             className="demo-card"
             to="/story/$storyId"
             params={{ storyId: demo.id }}
+            search={{ mode: 'brief' }}
           >
             <span className="demo-symbol">Aa</span>
             <div>
               <span className="eyebrow">阅读示例</span>
-              <h3>{demo.title}</h3>
-              <p>一段原创短文，用来体验排版与阅读设置。不是游戏剧情。</p>
+              <h3>试试简述与详述切换</h3>
+              <p>原创虚构短文，非游戏剧情。可体验两种篇幅与折叠卡片。</p>
             </div>
             <span className="card-arrow">↗</span>
           </Link>
         )}
       </section>
-      {stories.map((article) => (
-        <Link
-          className="demo-card"
-          key={article.id}
-          to="/story/$storyId"
-          params={{ storyId: article.id }}
-        >
-          <span className="preparing-number">{article.version}</span>
-          <div>
-            <span className="eyebrow">第 {article.act} 幕</span>
-            <h3>
-              {prefs.visitedArticleIds.includes(article.id)
-                ? article.title
-                : '未读故事'}
-            </h3>
-            <p>
-              {prefs.completedArticleIds.includes(article.id)
-                ? '已读完'
-                : '点击开始阅读'}
-            </p>
-          </div>
-          <span className="card-arrow">↗</span>
-        </Link>
-      ))}
       <footer className="page-footer">
-        <p>故事会逐篇补齐，不必急着一次读完。</p>
-        <span>独立创作 · 非官方项目</span>
+        <p>目前收录 6.1 第三、第四幕。其他版本逐步补齐。</p>
+        <span>独立复述 · 非官方项目</span>
       </footer>
     </div>
   )

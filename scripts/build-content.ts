@@ -38,7 +38,14 @@ export async function buildContent() {
       JSON.stringify(article),
     )
   const catalog = articles.map(
-    ({ html: _html, scenes: _scenes, ...meta }) => meta,
+    ({
+      html: _html,
+      scenes: _scenes,
+      preambleHtml: _preamble,
+      detailed: _detailed,
+      notes: _notes,
+      ...meta
+    }) => meta,
   )
   const cases = articles
     .map(

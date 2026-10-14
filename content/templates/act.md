@@ -5,12 +5,14 @@ arc: '待核实'
 act: 1
 title: '待核实幕名'
 order: 1
+mode: 'brief'
 status: 'draft'
 spoilerThrough:
   version: '0.0'
   act: 1
 updated: '2026-10-14'
 sources: []
+notes: []
 ---
 
 <!-- 模板不参与发布。复制到 content/stories/版本号/ 后填写稳定 ID 和真实来源；以下均为写作提示，不是剧情正文。来源使用 sources 元数据，每项包含 id、title 和 https URL。 -->

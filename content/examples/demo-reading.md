@@ -6,6 +6,7 @@ act: 1
 title: '把一段故事慢慢讲清楚'
 order: 1
 status: 'published'
+mode: 'detailed'
 spoilerThrough:
   version: '0.0'
   act: 1
@@ -16,7 +17,7 @@ sources:
     url: 'https://github.com/ZhengyangChang/genshin-story-reader/blob/main/docs/content-guide.md'
 ---
 
-这是一篇原创排版示例，不是《原神》剧情，也不代表任何角色的经历。正式故事仍在准备中。这里用一段虚构的小故事，试一试长文、目录和阅读设置。
+这是一篇原创排版示例，不是《原神》剧情，也不代表任何角色的经历。这里不涉及游戏情节。这里用一段虚构的小故事，试一试长文、目录和阅读设置。
 
 ## arrival | 一封迟到的信
 

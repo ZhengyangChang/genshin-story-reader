@@ -27,8 +27,9 @@ export function ReaderShell({ children }: { children: ReactNode }) {
         trigger.current?.focus()
       }
       if (e.key === 'Tab') {
-        const elements =
-          panel.current?.querySelectorAll<HTMLElement>('a,button,input')
+        const elements = panel.current?.querySelectorAll<HTMLElement>(
+          'a,button,input:not([hidden])',
+        )
         if (!elements?.length) return
         const first = elements[0],
           last = elements[elements.length - 1]
@@ -104,7 +105,12 @@ export function ReaderShell({ children }: { children: ReactNode }) {
           </button>
         </div>
         <p className="sidebar-note">一幕一篇，循着故事往前走。</p>
-        <nav aria-label="故事目录">
+        <nav
+          aria-label="故事目录"
+          onClick={(event) => {
+            if ((event.target as HTMLElement).closest('a')) setOpen(false)
+          }}
+        >
           <Link
             className="home-link"
             to="/"
@@ -136,7 +142,7 @@ export function ReaderShell({ children }: { children: ReactNode }) {
                       : `第 ${article.act} 幕 · 未读`}
                     <small>
                       {prefs.completedArticleIds.includes(article.id)
-                        ? '已读完'
+                        ? '已有读完记录'
                         : article.demo
                           ? '原创排版演示'
                           : '点击开始阅读'}
@@ -223,6 +229,9 @@ export function ReaderShell({ children }: { children: ReactNode }) {
                   throw Error()
                 const valid = new Set(catalog.map((a) => a.id))
                 const value = validatePreferences(raw)
+                value.completedEditionKeys = value.completedEditionKeys.filter(
+                  (key) => valid.has(key.split(':')[0]),
+                )
                 value.visitedArticleIds = value.visitedArticleIds.filter((id) =>
                   valid.has(id),
                 )
@@ -246,10 +255,10 @@ export function ReaderShell({ children }: { children: ReactNode }) {
           </p>
         </section>
         <footer className="sidebar-footer">
-          <span className="status-dot" /> 内容筹备中 <span>非官方项目</span>
+          <span className="status-dot" /> 6.1 简述已收录 <span>非官方项目</span>
         </footer>
       </aside>
-      <main id="main" className="main-content" tabIndex={-1}>
+      <main id="main" className="main-content" tabIndex={-1} inert={open}>
         {children}
       </main>
     </div>

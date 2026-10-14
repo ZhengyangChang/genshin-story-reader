@@ -2,7 +2,7 @@
 
 用中文逐幕讲清《原神》发生了什么：经过、人物选择、转折，以及这些事为什么连在一起。
 
-已搭建 **Bun + TanStack Start + React + TypeScript + Vite** 工程。当前有阅读入口、文章页和一篇明确标注的原创排版示例；正式游戏剧情尚未发布，网站尚未部署。
+已搭建 **Bun + TanStack Start + React + TypeScript + Vite** 工程。当前收录 6.1 第三、第四幕简述，支持折叠补充和点击身份揭示；另有双篇幅原创演示。网站尚未部署。
 
 ## 本地运行
 
@@ -13,7 +13,7 @@ bun install --frozen-lockfile
 bun run dev
 ```
 
-打开终端打印的地址，默认 http://127.0.0.1:3000/。文章示例：/story/demo-reading。
+打开终端打印的地址，默认 http://127.0.0.1:3000/。正式阅读入口：/story/aq-6-1-act-3?mode=brief。双篇幅演示：/story/demo-reading。
 
 ```sh
 bun run check          # 生产构建、类型检查、测试
@@ -26,7 +26,9 @@ bun run format         # 格式化源码与文档
 ## 当前能力
 
 - 按版本／幕组织目录，固定文章 ID 与场景锚点。
-- 长文阅读、前后篇、来源折叠、未知文章 404。
+- 6.1 两幕简述，长文阅读、前后篇、来源折叠、未知文章 404。
+- 同幕简述／详述切换，读完状态分开；真实详述待补，演示可切换。
+- 默认折叠的彩蛋／伏笔／收束／背景卡片，正文关键词点击揭示。
 - 日夜模式、字号、行宽，移动端目录抽屉。
 - 本地访问／读完记录、继续阅读、JSON 导出导入。
 - 未访问正式文章的目录标题隐藏；访问不自动算读完。
@@ -45,12 +47,13 @@ bun run format         # 格式化源码与文档
 连续的故事叙述……
 ```
 
-只有 status: published 的文章进入阅读器。资料来源放在 sources 元数据，不另加“资料”场景页。排版示例存放在 content/examples/，与正式剧情分开标记。
+mode 使用 brief 或 detailed；同一幕的不同篇幅共用 id 与场景 ID。补充放在简述文件的 notes，正文用 `[[显示文本|note-id]]` 点击打开。只有 status: published 的文章进入阅读器。资料来源放在 sources 元数据，不另加“资料”场景页。排版示例存放在 content/examples/，与正式剧情分开标记。
 
 ## 文档入口
 
 - [项目架构](docs/architecture.md)
 - [开发说明](docs/development.md)
+- [简述／详述与补充格式](docs/content-model.md)
 - [内容规范](docs/content-guide.md)
 - [视觉与交互](docs/design.md)
 - [实施计划](docs/roadmap.md)

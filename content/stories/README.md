@@ -1,4 +1,3 @@
 # 正文目录
 
-当前暂无已核实正文。后续按版本建立目录，例如 `6.1/act-4.md`。
-文件名用于整理，文章身份使用元数据中的固定 id。模板在 ../templates/act.md。
+当前收录 6.1 第三、第四幕的简述版。每幕的不同叙述版本分别存为 act-N.brief.md 与 act-N.detailed.md，共用稳定 id 和场景锚点。详见 ../../docs/content-model.md。

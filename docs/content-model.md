@@ -1,0 +1,57 @@
+# 简述、详述与补充卡片
+
+## 同一幕的两种篇幅
+
+游戏版本号（例如 6.1）与叙述版本（brief / detailed）是两个不同维度。
+
+- 简述：篇幅接近最初参考站，以主要经过与转折为主。本次先完成整个 6.1 的两幕。
+- 详述：在相同场景下补足行动、信息揭示、前因后果。尚未成稿时按钮禁用，不能用简述冒充详述。
+- 演示文章已有两种篇幅，可以验证切换；真实两幕目前仅发布简述。
+
+文件例如 content/stories/6.1/act-4.brief.md 与 act-4.detailed.md。两个文件的 id、version、arc、act、title、order 必须相同，mode 分别为 brief、detailed；各自拥有 status、updated、sources。每幕必须先有已发布简述。
+
+编译时按 id 合并，检查每种 mode 唯一、主场景锚点和顺序一致。详述可用更多段落与列表展开，但不增加不同的一组主场景。详述草稿不会进入发布数据。
+
+路由示例：/story/aq-6-1-act-4?mode=brief#aftermath。mode 显式指定的链接优先于本地偏好；无详述时安全回退到简述并说明。切换按当前主场景恢复位置，不要求字数不同的版本保持同一滚动像素。
+
+访问记录以整幕计；读完记录分别保存 story-id:brief、story-id:detailed，读完简述不等于读完详述。旧版整幕读完记录自动视为简述读完。
+
+## 场景与补充
+
+场景标题：`## aftermath | 战斗之后`。竖线前是永久 ID。
+
+共享补充写在简述文件的 notes 元数据内；两个叙述版本均可显示，不各写一份。
+
+```yaml
+notes:
+  - id: absent-colleague
+    scene: aftermath
+    kind: foreshadowing
+    title: 茶会里没被点名的同事
+    evidence: interpretation
+    spoiler: current
+    sourceIds: [echo]
+    body: |
+      点击后显示的说明。可以使用安全 Markdown。
+```
+
+kind 支持 easter-egg（彩蛋）、foreshadowing（伏笔）、closure（收束）、context（背景）。evidence 支持 confirmed 与 interpretation；spoiler 支持 current 与 future。正文语法：`[[某人|absent-colleague]]`。
+
+引用必须指向同一场景内存在的 note ID，sourceIds 必须指向简述 sources 中的有效资料。构建阻止孤立引用、重复 note ID 和不存在的场景。补充正文不支持嵌套引用。
+
+## 剧透与证据
+
+所有卡片默认收起，不自动因为已读其他文章而展开。current 只允许使用本幕及此前信息；future 折叠标题显示中性提醒，用户点击后才渲染答案。答案仍存在按篇下载的内容数据里，因此这是阅读防剧透，不是内容访问控制。
+
+身份推断与明确点名必须分开。6.1 茶会台词未直接点名：本次把“博士”作为可点击的身份推断显示，没有把后续行动写入本幕。若以后补充回收证据，增加独立 future 卡片并注明对应版本，而不悄悄修改 current 卡片的信息边界。
+
+本次资料核查记录见 ../content/sources/6.1.md。正式详述仍需对照完整实录补核镜头与动作，不从简述自动注水扩写。
+
+## 手机验收
+
+- 320px 与 390px 单栏，无横向溢出；支持最大字号 24px。
+- 版本切换和补充按钮支持触摸与键盘，不依赖悬浮。
+- 顶部目录入口固定；切换条在阅读中可触及，不能盖住场景标题。
+- 卡片在正文位置展开，长文本换行；关闭后不丢失整幕位置。
+- 版本切换保留当前主场景；目录不把两个叙述版本重复列成两幕。
+- 手机目录抽屉有关闭按钮、遮罩、Escape 与焦点循环。

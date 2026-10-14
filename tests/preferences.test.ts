@@ -20,3 +20,16 @@ test('damaged reading records fall back to safe preferences', () => {
   expect(result.visitedArticleIds).toEqual(['one'])
   expect(result.completedArticleIds).toEqual([])
 })
+
+test('legacy completed records migrate to brief only', () => {
+  const migrated = validatePreferences({
+    schemaVersion: 1,
+    completedArticleIds: ['story-one'],
+  })
+  expect(migrated.completedEditionKeys).toEqual(['story-one:brief'])
+  expect(migrated.completedEditionKeys).not.toContain('story-one:detailed')
+  expect(
+    validatePreferences({ schemaVersion: 1, readingMode: 'invalid' })
+      .readingMode,
+  ).toBe('brief')
+})

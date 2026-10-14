@@ -9,6 +9,8 @@ import {
 export type Preferences = {
   schemaVersion: 1
   theme: 'day' | 'night'
+  readingMode: 'brief' | 'detailed'
+  completedEditionKeys: string[]
   fontSize: number
   lineWidth: number
   lastArticleId: string | null
@@ -18,6 +20,8 @@ export type Preferences = {
 const defaults: Preferences = {
   schemaVersion: 1,
   theme: 'day',
+  readingMode: 'brief',
+  completedEditionKeys: [],
   fontSize: 19,
   lineWidth: 36,
   lastArticleId: null,
@@ -45,6 +49,12 @@ export function validatePreferences(value: unknown): Preferences {
   return {
     ...defaults,
     theme: raw.theme === 'night' ? 'night' : 'day',
+    readingMode: raw.readingMode === 'detailed' ? 'detailed' : 'brief',
+    completedEditionKeys: Array.isArray(raw.completedEditionKeys)
+      ? stringList(raw.completedEditionKeys).filter((key) =>
+          /^[a-z0-9-]+:(brief|detailed)$/.test(key),
+        )
+      : stringList(raw.completedArticleIds).map((id) => `${id}:brief`),
     fontSize: clamp(raw.fontSize, 16, 24, 19),
     lineWidth: clamp(raw.lineWidth, 26, 42, 36),
     lastArticleId:
