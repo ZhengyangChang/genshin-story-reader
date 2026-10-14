@@ -27,5 +27,5 @@ public/                后续本地静态素材
 先完成 6.1 奈芙尔相关情节样章，再扩成完整一幕，最后接入阅读器。全文、代码和视觉实现独立创作。
 
 本地工作目录：`C:\Users\Zhengyang Chang\Documents\code\genshin-story-reader`。
-GitHub：计划使用 `ZhengyangChang/genshin-story-reader`，私有。
+GitHub：[`ZhengyangChang/genshin-story-reader`](https://github.com/ZhengyangChang/genshin-story-reader)，私有。
 代码和原创文章的对外许可证暂未选定；公开发布前分别确定。
