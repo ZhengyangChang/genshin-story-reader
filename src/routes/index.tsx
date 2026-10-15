@@ -60,7 +60,7 @@ function Home() {
       <section id="collection" className="collection">
         <div className="section-heading">
           <h2>故事目录</h2>
-          <span>{stories.length} 幕 · 简述</span>
+          <span>{stories.length} 幕</span>
         </div>
         {stories.map((article) => (
           <Link
