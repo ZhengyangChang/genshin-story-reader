@@ -114,7 +114,7 @@ function Home() {
         )}
       </section>
       <footer className="page-footer">
-        <p>目前收录 6.1 第三、第四幕。其他版本逐步补齐。</p>
+        <p>目前收录《空月之歌》第一至第四幕，均可切换简述与详述。</p>
         <span>独立复述 · 非官方项目</span>
       </footer>
     </div>

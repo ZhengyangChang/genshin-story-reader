@@ -255,7 +255,7 @@ export function ReaderShell({ children }: { children: ReactNode }) {
           </p>
         </section>
         <footer className="sidebar-footer">
-          <span className="status-dot" /> 6.1 简述已收录 <span>非官方项目</span>
+          <span className="status-dot" /> 前四幕已收录 <span>非官方项目</span>
         </footer>
       </aside>
       <main id="main" className="main-content" tabIndex={-1} inert={open}>
