@@ -114,7 +114,9 @@ function StoryContent({ article }: { article: Article }) {
   const switchMode = (next: ReadingMode) => {
     if (next === mode) return
     const headings = [
-      ...(content.current?.querySelectorAll<HTMLElement>('h2[id]') ?? []),
+      ...(content.current?.querySelectorAll<HTMLElement>(
+        '[data-scene-anchor]',
+      ) ?? []),
     ]
     anchorAfterSwitch.current =
       headings
@@ -184,13 +186,15 @@ function StoryContent({ article }: { article: Article }) {
             ? '本篇详述尚未发布，当前显示简述。'
             : ''}
         </p>
-        <nav className="scene-nav" aria-label="本篇小节">
-          {edition.scenes.map((scene) => (
-            <a key={scene.id} href={`#${scene.id}`}>
-              {scene.title}
-            </a>
-          ))}
-        </nav>
+        {mode === 'detailed' && (
+          <nav className="scene-nav" aria-label="本篇小节">
+            {edition.scenes.map((scene) => (
+              <a key={scene.id} href={`#${scene.id}`}>
+                {scene.title}
+              </a>
+            ))}
+          </nav>
+        )}
         {article.demo && (
           <aside className="demo-notice">
             排版示例 ·
@@ -223,9 +227,14 @@ function StoryContent({ article }: { article: Article }) {
             />
           )}
           {edition.scenes.map((scene) => (
-            <section className="story-scene" key={scene.id}>
+            <section
+              className="story-scene"
+              key={scene.id}
+              id={scene.id}
+              data-scene-anchor
+            >
               <div className="prose">
-                <h2 id={scene.id}>{scene.title}</h2>
+                {mode === 'detailed' && <h2>{scene.title}</h2>}
                 <div dangerouslySetInnerHTML={{ __html: scene.html }} />
               </div>
               {(mode === 'detailed' ? article.notes : [])
