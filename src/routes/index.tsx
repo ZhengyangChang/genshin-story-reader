@@ -114,7 +114,7 @@ function Home() {
         )}
       </section>
       <footer className="page-footer">
-        <p>目前收录《空月之歌》第一至第六幕，均可点击段落展开详述。</p>
+        <p>目前收录《空月之歌》第一至第八幕，均可点击段落展开详述。</p>
         <span>独立复述 · 非官方项目</span>
       </footer>
     </div>

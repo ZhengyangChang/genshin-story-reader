@@ -18,7 +18,7 @@ export const Route = createRootRoute({
       {
         name: 'description',
         content:
-          '按版本与幕，慢慢读懂故事。空月之歌前六幕，点击段落展开详述，补充按需展开。',
+          '按版本与幕，慢慢读懂故事。空月之歌前八幕，点击段落展开详述，补充按需展开。',
       },
     ],
     links: [{ rel: 'stylesheet', href: styles }],
