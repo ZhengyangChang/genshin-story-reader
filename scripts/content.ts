@@ -170,10 +170,48 @@ export function parseArticle(raw: string, demo = false): Article | null {
   }
 }
 
+const pairedBlock = z.object({
+  id,
+  title: z.string().min(1),
+  brief: z.string().trim().min(1),
+  detail: z.string().trim().min(1),
+})
+
+// Paired Markdown stores both texts together in YAML frontmatter. Reuse the
+// existing Markdown safety, source, spoiler and supplement validation below.
+export function expandPairedInput(input: { source: string; demo: boolean }) {
+  const parsed = matter(input.source)
+  if (parsed.data.format !== 'paired') return [input]
+  const blocks = z.array(pairedBlock).min(1).parse(parsed.data.blocks)
+  if (parsed.content.trim()) throw new Error('Paired content belongs in blocks')
+  if (new Set(blocks.map((block) => block.id)).size !== blocks.length)
+    throw new Error('Duplicate paired block ID')
+  if (blocks.some((block) => /\n\s*\n/.test(block.brief)))
+    throw new Error('Each paired brief must be a single narrative paragraph')
+  const { blocks: _blocks, format: _format, ...meta } = parsed.data
+  return (['brief', 'detailed'] as const).map((mode) => ({
+    demo: input.demo,
+    source: matter.stringify(
+      blocks
+        .map(
+          (block) =>
+            '## ' +
+            block.id +
+            ' | ' +
+            block.title +
+            '\n\n' +
+            (mode === 'brief' ? block.brief : block.detail),
+        )
+        .join('\n\n'),
+      { ...meta, mode, notes: mode === 'brief' ? (meta.notes ?? []) : [] },
+    ),
+  }))
+}
+
 export function collectArticles(inputs: { source: string; demo: boolean }[]) {
   const groups = new Map<string, Partial<Record<ReadingMode, Article>>>()
   const keys = new Set<string>()
-  for (const input of inputs) {
+  for (const input of inputs.flatMap(expandPairedInput)) {
     const meta = metadata.parse(matter(input.source).data)
     const key = `${meta.id}:${meta.mode}`
     if (keys.has(key)) throw new Error(`Duplicate article ID and mode: ${key}`)

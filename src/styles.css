@@ -908,3 +908,120 @@ input[type='range'] {
     line-height: 1.2;
   }
 }
+
+/* Paragraphs are the reading controls; their surface stays quiet at rest. */
+.reading-guide {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid var(--line);
+  padding: 12px 0;
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+}
+.reading-guide p {
+  margin: 0;
+}
+.reading-guide button {
+  min-height: 44px;
+  padding: 8px 0 8px 12px;
+  white-space: nowrap;
+}
+.reading-guide button span {
+  margin-left: 8px;
+  color: var(--accent);
+}
+.narrative-block {
+  margin: 0 0 1.6em;
+}
+.narrative-copy {
+  overflow: clip;
+}
+.narrative-text {
+  padding: 8px 12px;
+  margin: 0 -12px;
+  border-radius: 4px;
+}
+.narrative-text p {
+  margin: 0 0 1.25em;
+}
+.narrative-text > :last-child {
+  margin-bottom: 0;
+}
+.narrative-text.is-interactive {
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 220ms;
+}
+.narrative-text[role='button']:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.is-expanded .narrative-text {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--soft) 65%, transparent),
+    transparent 75%
+  );
+  animation: passage-reveal 380ms ease-out both;
+}
+.narrative-text[role='button'] {
+  animation: passage-reveal 260ms ease-out both;
+}
+@keyframes passage-reveal {
+  from {
+    opacity: 0.35;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.passage-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+.passage-rule {
+  height: 1px;
+  width: 38px;
+  background: var(--line);
+}
+.passage-collapse {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  min-height: 44px;
+  color: var(--muted);
+  border-radius: 50%;
+}
+@media (hover: hover) {
+  .narrative-text[role='button']:hover {
+    background-color: var(--soft);
+  }
+  .passage-collapse:hover {
+    background: var(--soft);
+    color: var(--accent);
+  }
+}
+@media (max-width: 760px) {
+  .reading-guide {
+    gap: 8px;
+  }
+  .narrative-text {
+    padding: 8px 6px;
+    margin: 0 -6px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .narrative-text,
+  .is-expanded .narrative-text {
+    animation: none;
+    transition: none;
+  }
+}

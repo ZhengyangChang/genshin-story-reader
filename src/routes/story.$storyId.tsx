@@ -7,7 +7,7 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import { catalog, getArticle } from '../lib/content'
 import { usePreferences } from '../lib/preferences'
-import { SupplementCard } from '../components/supplement-card'
+import { NarrativeBlock } from '../components/narrative-block'
 import type { Article, ReadingMode } from '../../scripts/content'
 
 export const Route = createFileRoute('/story/$storyId')({
@@ -36,18 +36,24 @@ function StoryContent({ article }: { article: Article }) {
   const search = Route.useSearch()
   const navigate = useNavigate()
   const mode =
-    (search.mode ?? prefs.readingMode) === 'detailed' && article.detailed
-      ? 'detailed'
-      : 'brief'
-  const edition = mode === 'detailed' ? article.detailed! : article
+    search.mode === 'detailed' && article.detailed ? 'detailed' : 'brief'
+  const edition = article.detailed ?? article
+  const [expanded, setExpanded] = useState<Set<string>>(
+    () =>
+      new Set(
+        mode === 'detailed' ? article.scenes.map((scene) => scene.id) : [],
+      ),
+  )
+  const allExpanded =
+    !!article.detailed && expanded.size === article.scenes.length
+  const completionMode = allExpanded ? 'detailed' : 'brief'
   const [openNotes, setOpenNotes] = useState<Set<string>>(new Set())
   const content = useRef<HTMLDivElement>(null)
-  const anchorAfterSwitch = useRef<string | null>(null)
   const siblings = catalog.filter((item) => item.demo === article.demo)
   const index = siblings.findIndex((item) => item.id === article.id)
   const previous = siblings[index - 1],
     next = siblings[index + 1]
-  const completionKey = `${article.id}:${mode}`
+  const completionKey = `${article.id}:${completionMode}`
   const complete = prefs.completedEditionKeys.includes(completionKey)
   useEffect(() => {
     if (ready)
@@ -58,12 +64,6 @@ function StoryContent({ article }: { article: Article }) {
       }))
   }, [article.id, ready, update])
   useEffect(() => {
-    if (anchorAfterSwitch.current) {
-      document
-        .getElementById(anchorAfterSwitch.current)
-        ?.scrollIntoView({ block: 'start' })
-      anchorAfterSwitch.current = null
-    }
     for (const button of content.current?.querySelectorAll<HTMLButtonElement>(
       '[data-note]',
     ) ?? [])
@@ -71,7 +71,7 @@ function StoryContent({ article }: { article: Article }) {
         'aria-expanded',
         String(openNotes.has(button.dataset.note!)),
       )
-  }, [mode, openNotes])
+  }, [expanded, openNotes])
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
       if (
@@ -97,7 +97,7 @@ function StoryContent({ article }: { article: Article }) {
         void navigate({
           to: '/story/$storyId',
           params: { storyId: target.id },
-          search: { mode },
+          search: {},
         })
       }
     }
@@ -111,27 +111,28 @@ function StoryContent({ article }: { article: Article }) {
       else next.add(id)
       return next
     })
-  const switchMode = (next: ReadingMode) => {
-    if (next === mode) return
-    const headings = [
-      ...(content.current?.querySelectorAll<HTMLElement>(
-        '[data-scene-anchor]',
-      ) ?? []),
-    ]
-    anchorAfterSwitch.current =
-      headings
-        .filter((heading) => heading.getBoundingClientRect().top <= 220)
-        .at(-1)?.id ?? null
-    setOpenNotes(new Set())
-    update((old) => ({ ...old, readingMode: next }))
-    void navigate({
-      to: '/story/$storyId',
-      params: { storyId: article.id },
-      search: { mode: next },
-      hash: anchorAfterSwitch.current ?? '',
-      replace: true,
-      resetScroll: false,
+  const toggleBlock = (id: string) => {
+    setExpanded((old) => {
+      const next = new Set(old)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
     })
+    setOpenNotes(
+      (old) =>
+        new Set(
+          [...old].filter(
+            (noteId) =>
+              !article.notes.some(
+                (note) => note.id === noteId && note.scene === id,
+              ),
+          ),
+        ),
+    )
+  }
+  const setAll = (open: boolean) => {
+    setExpanded(new Set(open ? article.scenes.map((scene) => scene.id) : []))
+    setOpenNotes(new Set())
   }
   const label = (item: typeof previous) =>
     item && (item.demo || prefs.visitedArticleIds.includes(item.id))
@@ -160,45 +161,18 @@ function StoryContent({ article }: { article: Article }) {
             <span>修订于 {edition.updated}</span>
           </div>
         </header>
-        <div className="edition-toolbar" role="group" aria-label="叙述版本">
-          <span>阅读版本</span>
-          <div>
-            <button
-              aria-pressed={mode === 'brief'}
-              onClick={() => switchMode('brief')}
-            >
-              简述
+        <div className="reading-guide">
+          <p>点击段落，读得更深一点。</p>
+          {article.detailed && (
+            <button type="button" onClick={() => setAll(!allExpanded)}>
+              {allExpanded ? '全部收起' : '全部展开'}{' '}
+              <span aria-hidden="true">{allExpanded ? '−' : '+'}</span>
             </button>
-            <button
-              aria-pressed={mode === 'detailed'}
-              disabled={!article.detailed}
-              onClick={() => switchMode('detailed')}
-            >
-              {article.detailed ? '详述' : '详述 · 待补充'}
-            </button>
-          </div>
+          )}
         </div>
-        <p className="edition-caption">
-          {mode === 'brief'
-            ? '先读主要经过。更多细节与补充可切换到详述查看。'
-            : '展开事件经过与前因后果，保留同一组场景与补充入口。'}
-          {search.mode === 'detailed' && !article.detailed
-            ? '本篇详述尚未发布，当前显示简述。'
-            : ''}
-        </p>
-        {mode === 'detailed' && (
-          <nav className="scene-nav" aria-label="本篇小节">
-            {edition.scenes.map((scene) => (
-              <a key={scene.id} href={`#${scene.id}`}>
-                {scene.title}
-              </a>
-            ))}
-          </nav>
-        )}
         {article.demo && (
           <aside className="demo-notice">
-            排版示例 ·
-            原创虚构故事，非游戏剧情。这里可以体验两个叙述版本的切换。
+            排版示例 · 原创虚构故事，非游戏剧情。点击段落可以体验详略展开。
           </aside>
         )}
         <div
@@ -220,34 +194,23 @@ function StoryContent({ article }: { article: Article }) {
               ?.scrollIntoView({ block: 'nearest' })
           }}
         >
-          {edition.preambleHtml && (
-            <div
-              className="prose"
-              dangerouslySetInnerHTML={{ __html: edition.preambleHtml }}
-            />
-          )}
-          {edition.scenes.map((scene) => (
-            <section
-              className="story-scene"
+          {article.scenes.map((scene) => (
+            <NarrativeBlock
               key={scene.id}
               id={scene.id}
-              data-scene-anchor
-            >
-              <div className="prose">
-                {mode === 'detailed' && <h2>{scene.title}</h2>}
-                <div dangerouslySetInnerHTML={{ __html: scene.html }} />
-              </div>
-              {(mode === 'detailed' ? article.notes : [])
-                .filter((note) => note.scene === scene.id)
-                .map((note) => (
-                  <SupplementCard
-                    key={note.id}
-                    note={note}
-                    open={openNotes.has(note.id)}
-                    onToggle={() => toggle(note.id)}
-                  />
-                ))}
-            </section>
+              title={scene.title}
+              briefHtml={scene.html}
+              detailHtml={
+                article.detailed?.scenes.find(
+                  (detail) => detail.id === scene.id,
+                )?.html
+              }
+              expanded={expanded.has(scene.id)}
+              onToggle={() => toggleBlock(scene.id)}
+              notes={article.notes.filter((note) => note.scene === scene.id)}
+              openNotes={openNotes}
+              onToggleNote={toggle}
+            />
           ))}
         </div>
         <div className="end-mark" aria-hidden="true">
@@ -256,8 +219,8 @@ function StoryContent({ article }: { article: Article }) {
         <div className="completion">
           <p>
             {complete
-              ? `已读完本篇${mode === 'brief' ? '简述' : '详述'}。`
-              : '读到这里，给这个版本留个记号。'}
+              ? `已读完本篇${completionMode === 'brief' ? '简述' : '详述'}。`
+              : '读到这里，给这次阅读留个记号。'}
           </p>
           <button
             className={complete ? 'secondary-button' : 'primary-button'}
@@ -283,7 +246,7 @@ function StoryContent({ article }: { article: Article }) {
           >
             {complete
               ? '取消读完标记'
-              : `标记${mode === 'brief' ? '简述' : '详述'}读完 ✓`}
+              : `标记${completionMode === 'brief' ? '简述' : '详述'}读完 ✓`}
           </button>
         </div>
         <details className="sources">
@@ -306,7 +269,7 @@ function StoryContent({ article }: { article: Article }) {
             <Link
               to="/story/$storyId"
               params={{ storyId: previous.id }}
-              search={{ mode }}
+              search={{}}
             >
               ← 上一幕<small>{label(previous)}</small>
             </Link>
@@ -317,7 +280,7 @@ function StoryContent({ article }: { article: Article }) {
             <Link
               to="/story/$storyId"
               params={{ storyId: next.id }}
-              search={{ mode }}
+              search={{}}
             >
               下一幕 →<small>{label(next)}</small>
             </Link>

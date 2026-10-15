@@ -84,7 +84,7 @@ function Home() {
                   : '主要经过 · 详述含补充'}{' '}
                 ·{' '}
                 {article.availableModes.includes('detailed')
-                  ? '可切换详述'
+                  ? '点击段落看详述'
                   : '详述待补充'}
               </p>
             </div>
@@ -106,15 +106,15 @@ function Home() {
             <span className="demo-symbol">Aa</span>
             <div>
               <span className="eyebrow">阅读示例</span>
-              <h3>试试简述与详述切换</h3>
-              <p>原创虚构短文，非游戏剧情。可体验两种篇幅与折叠卡片。</p>
+              <h3>试试逐段展开阅读</h3>
+              <p>原创虚构短文，非游戏剧情。点击段落查看详述与折叠卡片。</p>
             </div>
             <span className="card-arrow">↗</span>
           </Link>
         )}
       </section>
       <footer className="page-footer">
-        <p>目前收录《空月之歌》第一至第六幕，均可切换简述与详述。</p>
+        <p>目前收录《空月之歌》第一至第六幕，均可点击段落展开详述。</p>
         <span>独立复述 · 非官方项目</span>
       </footer>
     </div>

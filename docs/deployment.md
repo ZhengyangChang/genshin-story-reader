@@ -19,7 +19,7 @@ bun run preview:pages
 
 预览地址：http://127.0.0.1:4173/genshin-story-reader/ 。这是真正的静态文件服务，不运行 Start 服务端。默认 bun run dev 仍在根路径开发。
 
-build:pages 生成 dist/client/index.html、每篇文章的 story/<id>/index.html、404.html、.nojekyll 与 assets。目录来自过滤草稿后的内容目录，正文两种篇幅由页面中的交互切换。构建验证资源与导航带有 /genshin-story-reader/ 前缀。
+build:pages 生成 dist/client/index.html、每篇文章的 story/<id>/index.html、404.html、.nojekyll 与 assets。目录来自过滤草稿后的内容目录，每段简述可由页面交互原地展开为详述。构建验证资源与导航带有 /genshin-story-reader/ 前缀。
 
 静态文件不提交；dist/ 仍被忽略。发布流程将 dist/client 作为 Pages artifact 上传，然后由 deploy-pages 发布。dist/server 不发布。不存在 gh-pages 生成文件分支。
 

@@ -21,7 +21,7 @@
 
 ## 3. 内容与标识
 
-正文采用 UTF-8 Markdown 加 YAML 元数据，目录由构建过程自动生成。每幕的每种叙述版本一个文件，共用稳定文章 ID；同一版本可容纳多幕。简述 brief 先行，详述 detailed 按需补充，合并后目录中只显示一幕。标题与文件顺序不作为身份。
+正文采用 UTF-8 Markdown 加 YAML 元数据，目录由构建过程自动生成。每幕一个 paired 文件，blocks 内的每条记录用稳定 ID 同时保存 brief 与 detail，编译后目录中只显示一幕。标题与文件顺序不作为身份。
 
 初始字段约定（模板见 content/templates/act.md）：
 
@@ -56,9 +56,9 @@ Markdown 禁止任意原始 HTML，链接只允许安全协议，图片默认使
 
 ## 5. 阅读状态
 
-浏览器本地保存 schemaVersion、lastArticleId、visitedArticleIds、completedArticleIds、completedEditionKeys、readingMode、theme、fontSize、lineWidth。读完状态按文章 ID 与叙述版本分别记录；旧记录迁移为简述读完。lastSceneId 为后续跨会话恢复目标，尚未保存。
+浏览器本地保存 schemaVersion、lastArticleId、visitedArticleIds、completedArticleIds、completedEditionKeys、readingMode、theme、fontSize、lineWidth。readingMode 为旧版兼容字段，普通访问默认逐段简述。读完状态按文章 ID 与篇幅分别记录；旧记录迁移为简述读完。lastSceneId 为后续跨会话恢复目标，尚未保存。
 
-进入文章只记为访问，不能直接算读完。通过“标记读完”记录完成状态；简述／详述切换时用共有场景锚点保留位置；跨会话目前只恢复文章。正文重排或新增文章不应破坏旧记录。
+进入文章只记为访问，不能直接算读完。通过“标记读完”记录完成状态；逐段展开使用稳定单元锚点，收起长文时保持段首可见；跨会话目前只恢复文章。正文重排或新增文章不应破坏旧记录。
 
 目前记录保存文章级进度；lastSceneId 和场景位置恢复尚待实现。解析失败或存储不可用时仍可阅读。导入记录校验格式及 ID；对不存在的文章忽略并给出提示。导出／导入支持跨设备手动迁移，更换域名不会自动继承 localStorage。
 
@@ -80,4 +80,4 @@ Markdown 禁止任意原始 HTML，链接只允许安全协议，图片默认使
 
 主线正文之外的背景、彩蛋、收束、伏笔以默认折叠卡片显示，放在所属场景末尾。正文用 `[[显示文本|note-id]]` 打开对应卡片，不依赖 hover。推断单独标明；后续信息卡片在展开前隐藏可能剧透的标题，答案不进入折叠状态的 DOM。
 
-手机采用单栏正文、置顶目录入口和版本切换条；按钮至少 44px 高，卡片就地展开。验收覆盖 320／390px、字号最大值和卡片展开状态。实现细节见 content-model.md。
+手机采用单栏正文与置顶目录入口，点击段落展开；按钮至少 44px 高，卡片就地展开。验收覆盖 320／390px、字号最大值和卡片展开状态。实现细节见 content-model.md。
