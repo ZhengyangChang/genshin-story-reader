@@ -77,8 +77,14 @@ test('editions with inconsistent scene IDs fail instead of jumping to the wrong 
   ).toThrow('share ordered scene IDs')
 })
 test('inline disclosures require a real note in the same scene and valid source', () => {
+  const brief = parseArticle(
+    fixture('brief', 'published', '提到[[某人|person]]。', notes),
+  )!
+  expect(brief.scenes[0].html).toContain('提到某人。')
+  expect(brief.scenes[0].html).not.toContain('data-note=')
+  expect(brief.html).not.toContain('note-reference')
   expect(
-    parseArticle(fixture('brief', 'published', '提到[[某人|person]]。', notes))
+    parseArticle(fixture('detailed', 'published', '提到[[某人|person]]。'))
       ?.scenes[0].html,
   ).toContain('data-note="person"')
   expect(() =>

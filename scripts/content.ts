@@ -69,8 +69,9 @@ md.inline.ruler.before('link', 'note_ref', (state, silent) => {
   state.pos += match[0].length
   return true
 })
-md.renderer.rules.note_ref = (tokens, index) => {
+md.renderer.rules.note_ref = (tokens, index, _options, env) => {
   const ref = tokens[index].meta as { label: string; id: string }
+  if (env?.readingMode === 'brief') return md.utils.escapeHtml(ref.label)
   return `<button type="button" class="note-reference" data-note="${ref.id}" aria-controls="note-${ref.id}" aria-expanded="false">${md.utils.escapeHtml(ref.label)}<span aria-hidden="true"> ⓘ</span></button>`
 }
 
@@ -149,12 +150,21 @@ export function parseArticle(raw: string, demo = false): Article | null {
   }
   if (preambleHtml.includes('data-note='))
     throw new Error(`${meta.id}: note references must belong to a scene`)
+  if (readingMode === 'brief') {
+    scenes.forEach((scene, i) => {
+      scene.html = md.renderer.render(
+        tokens.slice(starts[i] + 3, starts[i + 1] ?? tokens.length),
+        md.options,
+        { readingMode },
+      )
+    })
+  }
   return {
     ...meta,
     demo,
     availableModes: [readingMode],
     notes: supplements,
-    html: md.renderer.render(tokens, md.options, {}),
+    html: md.renderer.render(tokens, md.options, { readingMode }),
     scenes,
     preambleHtml,
   }

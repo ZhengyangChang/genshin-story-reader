@@ -120,6 +120,7 @@ function StoryContent({ article }: { article: Article }) {
       headings
         .filter((heading) => heading.getBoundingClientRect().top <= 220)
         .at(-1)?.id ?? null
+    setOpenNotes(new Set())
     update((old) => ({ ...old, readingMode: next }))
     void navigate({
       to: '/story/$storyId',
@@ -177,7 +178,7 @@ function StoryContent({ article }: { article: Article }) {
         </div>
         <p className="edition-caption">
           {mode === 'brief'
-            ? '先读主要经过。彩蛋、伏笔与补充默认收起，按需展开。'
+            ? '先读主要经过。更多细节与补充可切换到详述查看。'
             : '展开事件经过与前因后果，保留同一组场景与补充入口。'}
           {search.mode === 'detailed' && !article.detailed
             ? '本篇详述尚未发布，当前显示简述。'
@@ -227,7 +228,7 @@ function StoryContent({ article }: { article: Article }) {
                 <h2 id={scene.id}>{scene.title}</h2>
                 <div dangerouslySetInnerHTML={{ __html: scene.html }} />
               </div>
-              {article.notes
+              {(mode === 'detailed' ? article.notes : [])
                 .filter((note) => note.scene === scene.id)
                 .map((note) => (
                   <SupplementCard

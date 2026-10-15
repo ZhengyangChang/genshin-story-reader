@@ -81,7 +81,7 @@ function Home() {
               <p>
                 {prefs.completedArticleIds.includes(article.id)
                   ? '已有读完记录'
-                  : '主要经过 · 含折叠补充'}{' '}
+                  : '主要经过 · 详述含补充'}{' '}
                 ·{' '}
                 {article.availableModes.includes('detailed')
                   ? '可切换详述'
