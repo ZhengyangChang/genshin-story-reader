@@ -1,0 +1,41 @@
+name: Publish Pages (manual)
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type PUBLISH to publish the website publicly'
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main' && inputs.confirmation == 'PUBLISH'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+      - run: bun install --frozen-lockfile
+      - run: bun run build:pages
+      - run: bun run typecheck
+      - run: bun test
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist/client
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment

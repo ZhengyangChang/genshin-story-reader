@@ -47,6 +47,10 @@ export async function buildContent() {
       ...meta
     }) => meta,
   )
+  await writeFile(
+    join(dirname(output), 'catalog.json'),
+    JSON.stringify(catalog),
+  )
   const cases = articles
     .map(
       (article) =>

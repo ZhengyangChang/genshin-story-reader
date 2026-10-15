@@ -34,7 +34,7 @@ export const Route = createRootRoute({
     <div className="empty">
       <h1>这一页暂时无法打开</h1>
       <p>请刷新页面后重试。</p>
-      <a href="/">回到阅读入口</a>
+      <a href={import.meta.env.BASE_URL}>回到阅读入口</a>
     </div>
   ),
 })

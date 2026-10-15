@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "test": "bun test",
     "check": "bun run build && bun run typecheck && bun test",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "build:pages": "bun scripts/build-pages.ts",
+    "preview:pages": "bun scripts/preview-pages.ts"
   },
   "dependencies": {
     "@tanstack/react-router": "1.170.44",

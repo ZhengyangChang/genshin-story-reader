@@ -2,7 +2,7 @@
 
 用中文逐幕讲清《原神》发生了什么：经过、人物选择、转折，以及这些事为什么连在一起。
 
-已搭建 **Bun + TanStack Start + React + TypeScript + Vite** 工程。当前收录 6.1 第三、第四幕的简述与详述，支持折叠补充和点击身份揭示；另有双篇幅原创演示。网站尚未部署。
+已搭建 **Bun + TanStack Start + React + TypeScript + Vite** 工程。当前收录 6.1 第三、第四幕的简述与详述，支持折叠补充和点击身份揭示；另有双篇幅原创演示。GitHub Pages 已配置为手动发布，网站尚未部署。
 
 ## 本地运行
 
@@ -53,6 +53,7 @@ mode 使用 brief 或 detailed；同一幕的不同篇幅共用 id 与场景 ID�
 
 - [项目架构](docs/architecture.md)
 - [开发说明](docs/development.md)
+- [GitHub Pages 配置与手动发布](docs/deployment.md)
 - [简述／详述与补充格式](docs/content-model.md)
 - [内容规范](docs/content-guide.md)
 - [视觉与交互](docs/design.md)
@@ -60,6 +61,10 @@ mode 使用 brief 或 detailed；同一幕的不同篇幅共用 id 与场景 ID�
 - [来源与权利说明](NOTICE.md)
 
 本地工作目录：C:\Users\Zhengyang Chang\Documents\code\genshin-story-reader。
-私有仓库：[ZhengyangChang/genshin-story-reader](https://github.com/ZhengyangChang/genshin-story-reader)。
+公开仓库：[ZhengyangChang/genshin-story-reader](https://github.com/ZhengyangChang/genshin-story-reader)。
 
 代码、样式和正文独立实现，原参考项目只提供阅读体验方向。代码与原创文章的对外许可证待定。
+
+## Pages 准备状态
+
+`bun run build:pages` 生成带仓库子路径的静态网站；`bun run preview:pages` 在本机验证。推送只检查，发布必须手动运行 Publish Pages (manual) 并填写 PUBLISH。静态输出不提交到仓库。详见 docs/deployment.md。

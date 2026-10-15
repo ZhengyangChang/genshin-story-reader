@@ -29,6 +29,6 @@ templates 与 sources 目录不参与构建。stories 和 examples 分别扫描�
 
 继续阅读目前恢复文章，不恢复精确场景位置。桌面侧栏固定显示，手机抽屉可收起；桌面收起和手机滑动翻篇待后续。
 
-当前构建输出 dist/client 与 dist/server，是 TanStack Start 的服务端渲染构建。不能直接把 dist/client 当作完整 GitHub Pages 站点。后续确定 Bun/Node 服务适配、静态预渲染或托管平台适配后再增加 start／deploy 命令。本次不部署。
+普通 build 仍输出客户端与服务端；新增 build:pages 在构建时预渲染首页和所有已发布文章，生成可独立托管的 dist/client。资源与路由使用仓库子路径，已有独立静态预览与自定义 404。Pages 流程仅手动触发，本次未发布。详见 deployment.md。
 
 官方搭建依据：https://tanstack.com/start/latest/docs/framework/react/build-from-scratch
