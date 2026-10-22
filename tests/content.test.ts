@@ -57,3 +57,38 @@ test('published content requires sources and matching spoiler boundary', () => {
     parseArticle(fixture().replace('  version: "6.1"', '  version: "6.2"')),
   ).toThrow('spoiler boundary')
 })
+
+test('interludes keep their own label between numbered acts', async () => {
+  const { chapterLabel } = await import('../src/lib/chapter-label')
+  const result = collectArticles([
+    {
+      source: fixture('published', 'fifth', '5.3').replaceAll(
+        'act: 1',
+        'act: 5',
+      ),
+      demo: false,
+    },
+    {
+      source: fixture('published', 'interlude', '5.2')
+        .replaceAll('act: 1', 'act: 4')
+        .replace('arc: 示例', 'arc: 示例\nchapterType: interlude'),
+      demo: false,
+    },
+    {
+      source: fixture('published', 'fourth', '5.1').replaceAll(
+        'act: 1',
+        'act: 4',
+      ),
+      demo: false,
+    },
+  ])
+  expect(result.map((article) => article.id)).toEqual([
+    'fourth',
+    'interlude',
+    'fifth',
+  ])
+  expect(result[0].chapterType).toBe('act')
+  expect(chapterLabel(result[0])).toBe('第 4 幕')
+  expect(chapterLabel(result[1])).toBe('幕间')
+  expect(result[1].act).toBe(4)
+})

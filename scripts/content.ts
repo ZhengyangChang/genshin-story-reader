@@ -29,6 +29,7 @@ export const metadata = z.object({
   version,
   arc: z.string().min(1),
   act: z.number().int().positive(),
+  chapterType: z.enum(['act', 'interlude']).default('act'),
   title: z.string().min(1),
   order: z.number().int().nonnegative(),
   status: z.enum(['draft', 'review', 'published']),
@@ -230,7 +231,7 @@ export function collectArticles(inputs: { source: string; demo: boolean }[]) {
     if (group.detailed) {
       const detail = group.detailed
       if (
-        ['version', 'act', 'title', 'arc', 'order', 'demo'].some(
+        ['version', 'act', 'chapterType', 'title', 'arc', 'order', 'demo'].some(
           (key) => base[key as keyof Article] !== detail[key as keyof Article],
         )
       )

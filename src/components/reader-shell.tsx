@@ -1,6 +1,7 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { catalog } from '../lib/content'
+import { chapterLabel } from '../lib/chapter-label'
 import { usePreferences, validatePreferences } from '../lib/preferences'
 
 export function ReaderShell({ children }: { children: ReactNode }) {
@@ -106,7 +107,7 @@ export function ReaderShell({ children }: { children: ReactNode }) {
             ×
           </button>
         </div>
-        <p className="sidebar-note">一幕一篇，循着故事往前走。</p>
+        <p className="sidebar-note">循着故事，一篇篇往前走。</p>
         <nav
           aria-label="故事目录"
           onClick={(event) => {
@@ -135,13 +136,15 @@ export function ReaderShell({ children }: { children: ReactNode }) {
                   activeProps={{ className: 'toc-item active' }}
                 >
                   <span className="toc-number">
-                    {String(article.act).padStart(2, '0')}
+                    {article.chapterType === 'interlude'
+                      ? '幕间'
+                      : String(article.act).padStart(2, '0')}
                   </span>
                   <span>
                     {article.demo ||
                     prefs.visitedArticleIds.includes(article.id)
                       ? article.title
-                      : `第 ${article.act} 幕 · 未读`}
+                      : `${chapterLabel(article)} · 未读`}
                     <small>
                       {prefs.completedArticleIds.includes(article.id)
                         ? '已有读完记录'
@@ -258,7 +261,7 @@ export function ReaderShell({ children }: { children: ReactNode }) {
         </section>
         <footer className="sidebar-footer">
           <span className="status-dot" /> 已收录{' '}
-          {catalog.filter((article) => !article.demo).length} 幕{' '}
+          {catalog.filter((article) => !article.demo).length} 篇{' '}
           <span>非官方项目</span>
         </footer>
       </aside>

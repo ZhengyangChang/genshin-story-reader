@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import { catalog, getArticle } from '../lib/content'
+import { chapterLabel } from '../lib/chapter-label'
 import { usePreferences } from '../lib/preferences'
 import { NarrativeBlock } from '../components/narrative-block'
 import type { Article, ReadingMode } from '../../scripts/content'
@@ -139,7 +140,9 @@ function StoryContent({ article }: { article: Article }) {
   const label = (item: typeof previous) =>
     item && (item.demo || prefs.visitedArticleIds.includes(item.id))
       ? item.title
-      : `第 ${item?.act} 幕`
+      : item
+        ? chapterLabel(item)
+        : ''
   return (
     <div className="story-page">
       <div className="page-topline">
@@ -153,14 +156,14 @@ function StoryContent({ article }: { article: Article }) {
       <article className="story-article">
         <header className="story-header">
           <p className="eyebrow">
-            {article.arc} · {article.demo ? '示例 01' : `第 ${article.act} 幕`}
+            {article.arc} · {article.demo ? '示例 01' : chapterLabel(article)}
           </p>
           <h1>{article.title}</h1>
           <div className="story-meta">
             <span>
               {article.demo
                 ? '原创演示 · 非游戏剧情'
-                : `剧透范围：至 ${article.version} 第 ${article.act} 幕`}
+                : `剧透范围：至 ${article.version} ${chapterLabel(article)}`}
             </span>
             <span>修订于 {edition.updated}</span>
           </div>
@@ -275,10 +278,10 @@ function StoryContent({ article }: { article: Article }) {
               params={{ storyId: previous.id }}
               search={{}}
             >
-              ← 上一幕<small>{label(previous)}</small>
+              ← 上一篇<small>{label(previous)}</small>
             </Link>
           ) : (
-            <span>已是第一幕</span>
+            <span>已是第一篇</span>
           )}
           {next ? (
             <Link
@@ -286,7 +289,7 @@ function StoryContent({ article }: { article: Article }) {
               params={{ storyId: next.id }}
               search={{}}
             >
-              下一幕 →<small>{label(next)}</small>
+              下一篇 →<small>{label(next)}</small>
             </Link>
           ) : (
             <Link to="/">

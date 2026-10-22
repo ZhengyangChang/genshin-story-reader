@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { catalog } from '../lib/content'
+import { chapterLabel } from '../lib/chapter-label'
 import { usePreferences } from '../lib/preferences'
 
 export const Route = createFileRoute('/')({ component: Home })
@@ -60,7 +61,7 @@ function Home() {
       <section id="collection" className="collection">
         <div className="section-heading">
           <h2>故事目录</h2>
-          <span>{stories.length} 幕</span>
+          <span>{stories.length} 篇</span>
         </div>
         {stories.map((article) => (
           <Link
@@ -73,7 +74,7 @@ function Home() {
             <span className="preparing-number">{article.version}</span>
             <div>
               <span className="eyebrow">
-                {article.arc} · 第 {article.act} 幕
+                {article.arc} · {chapterLabel(article)}
               </span>
               <h3>
                 {prefs.visitedArticleIds.includes(article.id)
@@ -116,7 +117,9 @@ function Home() {
         )}
       </section>
       <footer className="page-footer">
-        <p>目前收录纳塔前四幕与《空月之歌》前八幕，均可点击段落展开详述。</p>
+        <p>
+          目前收录纳塔前五幕及幕间与《空月之歌》前八幕，均可点击段落展开详述。
+        </p>
         <span>独立复述 · 非官方项目</span>
       </footer>
     </div>
