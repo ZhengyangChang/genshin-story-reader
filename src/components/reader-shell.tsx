@@ -51,7 +51,9 @@ export function ReaderShell({ children }: { children: ReactNode }) {
   }, [open])
   const groups = new Map<string, typeof catalog>()
   for (const article of catalog) {
-    const group = article.demo ? '阅读示例' : `版本 ${article.version}`
+    const group = article.demo
+      ? '阅读示例'
+      : `${article.arc} · ${article.version}`
     groups.set(group, [...(groups.get(group) ?? []), article])
   }
   return (
@@ -255,7 +257,9 @@ export function ReaderShell({ children }: { children: ReactNode }) {
           </p>
         </section>
         <footer className="sidebar-footer">
-          <span className="status-dot" /> 前八幕已收录 <span>非官方项目</span>
+          <span className="status-dot" /> 已收录{' '}
+          {catalog.filter((article) => !article.demo).length} 幕{' '}
+          <span>非官方项目</span>
         </footer>
       </aside>
       <main id="main" className="main-content" tabIndex={-1} inert={open}>

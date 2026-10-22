@@ -49,7 +49,9 @@ function StoryContent({ article }: { article: Article }) {
   const completionMode = allExpanded ? 'detailed' : 'brief'
   const [openNotes, setOpenNotes] = useState<Set<string>>(new Set())
   const content = useRef<HTMLDivElement>(null)
-  const siblings = catalog.filter((item) => item.demo === article.demo)
+  const siblings = catalog.filter(
+    (item) => item.demo === article.demo && item.arc === article.arc,
+  )
   const index = siblings.findIndex((item) => item.id === article.id)
   const previous = siblings[index - 1],
     next = siblings[index + 1]
@@ -143,7 +145,9 @@ function StoryContent({ article }: { article: Article }) {
       <div className="page-topline">
         <Link to="/">← 阅读入口</Link>
         <span>
-          {article.demo ? '阅读体验示例' : `版本 ${article.version} · 空月之歌`}
+          {article.demo
+            ? '阅读体验示例'
+            : `版本 ${article.version} · ${article.arc}`}
         </span>
       </div>
       <article className="story-article">

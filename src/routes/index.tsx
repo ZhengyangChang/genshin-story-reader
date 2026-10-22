@@ -72,7 +72,9 @@ function Home() {
           >
             <span className="preparing-number">{article.version}</span>
             <div>
-              <span className="eyebrow">空月之歌 · 第 {article.act} 幕</span>
+              <span className="eyebrow">
+                {article.arc} · 第 {article.act} 幕
+              </span>
               <h3>
                 {prefs.visitedArticleIds.includes(article.id)
                   ? article.title
@@ -114,7 +116,7 @@ function Home() {
         )}
       </section>
       <footer className="page-footer">
-        <p>目前收录《空月之歌》第一至第八幕，均可点击段落展开详述。</p>
+        <p>目前收录纳塔前两幕与《空月之歌》前八幕，均可点击段落展开详述。</p>
         <span>独立复述 · 非官方项目</span>
       </footer>
     </div>

@@ -32,3 +32,5 @@ templates 与 sources 目录不参与构建。stories 和 examples 分别扫描�
 普通 build 仍输出客户端与服务端；新增 build:pages 在构建时预渲染首页和所有已发布文章，生成可独立托管的 dist/client。资源与路由使用仓库子路径，已有独立静态预览与自定义 404。Pages 流程仅手动触发，本次未发布。详见 deployment.md。
 
 官方搭建依据：https://tanstack.com/start/latest/docs/framework/react/build-from-scratch
+
+2026-10-22：新增纳塔第五章第一、第二幕（5.0），简述与详述成对保存，核查八个完整任务对话表，见 content/sources/5.0.md。头发变化按献力时序解释，救援力量明确另有纪念品燃料。
